@@ -18,6 +18,8 @@ public class HomeScreenActivity extends AppCompatActivity {
         String Lname = intent.getStringExtra("Lname");
         String Email = intent.getStringExtra("Email");
         String Password = intent.getStringExtra("Password");
+
+
+        String test; 
     }
 }
-//test
