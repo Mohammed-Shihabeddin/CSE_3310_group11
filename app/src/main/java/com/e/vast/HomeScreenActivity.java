@@ -20,3 +20,4 @@ public class HomeScreenActivity extends AppCompatActivity {
         String Password = intent.getStringExtra("Password");
     }
 }
+//test
