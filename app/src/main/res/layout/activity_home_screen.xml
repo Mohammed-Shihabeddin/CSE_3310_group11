@@ -6,13 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".HomeScreenActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="50dp"
-        android:layout_height="13dp"
-        android:text="TextView"
+    <Button
+        android:id="@+id/bEditInfo"
+        android:layout_width="298dp"
+        android:layout_height="61dp"
+        android:text="Edit Account Information"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.575"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.22" />
+
+    <Button
+        android:id="@+id/bStylePhoto"
+        android:layout_width="298dp"
+        android:layout_height="61dp"
+        android:text="Style Image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.575"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.483" />
+
+    <Button
+        android:id="@+id/bLogOut"
+        android:layout_width="298dp"
+        android:layout_height="61dp"
+        android:text="Log Out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.575"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.717" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
