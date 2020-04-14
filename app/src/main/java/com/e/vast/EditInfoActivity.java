@@ -3,6 +3,7 @@ package com.e.vast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,19 +20,26 @@ import org.json.JSONObject;
 
 public class EditInfoActivity extends AppCompatActivity {
 
+    EditText etFName;
+    EditText etMName;
+    EditText etLName;
+    EditText etPassword;
+    Button bSave;
+    String Email;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_info);
 
-        final EditText etFName = (EditText) findViewById(R.id.etFName);
-        final EditText etMName = (EditText) findViewById(R.id.etMName);
-        final EditText etLName = (EditText) findViewById(R.id.etLName);
-        final EditText etPassword = (EditText) findViewById(R.id.etPassword);
-        final Button bSave = (Button) findViewById(R.id.bSave);
+        etFName = (EditText) findViewById(R.id.etFName);
+        etMName = (EditText) findViewById(R.id.etMName);
+        etLName = (EditText) findViewById(R.id.etLName);
+        etPassword = (EditText) findViewById(R.id.etPassword);
+        bSave = (Button) findViewById(R.id.bSave);
 
         Intent getintent = getIntent();
-        final String Email = getintent.getStringExtra("Email");
+        Email = getintent.getStringExtra("Email");
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,51 +77,46 @@ public class EditInfoActivity extends AppCompatActivity {
             }
         });
 
-        onResume(Email);
     }
 
-   public void onResume(String Email){
+   public void onResume(){
         super.onResume();
-        Log.d("EMAIL", Email);
+        Log.d("Email", Email);
 
-       final EditText etFName = (EditText) findViewById(R.id.etFName);
-       final EditText etMName = (EditText) findViewById(R.id.etMName);
-       final EditText etLName = (EditText) findViewById(R.id.etLName);
-       final EditText etPassword = (EditText) findViewById(R.id.etPassword);
-       final Button bSave = (Button) findViewById(R.id.bSave);
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+                    boolean success = jsonResponse.getBoolean("success");
+                    if (success){
+                        String Fname = jsonResponse.getString("Fname");
+                        String Mname = jsonResponse.getString("Mname");
+                        String Lname = jsonResponse.getString("Lname");
+                        String Password = jsonResponse.getString("Password");
 
-       Response.Listener<String> responseListener = new Response.Listener<String>() {
-           @Override
-           public void onResponse(String response) {
-               try {
-                   JSONObject jsonResponse = new JSONObject(response);
-                   boolean success = jsonResponse.getBoolean("success");
-                   if (success){
-                       String Fname = jsonResponse.getString("Fname");
-                       String Mname = jsonResponse.getString("Mname");
-                       String Lname = jsonResponse.getString("Lname");
-                       String Password = jsonResponse.getString("Password");
+                        etFName.setText(Fname);
+                        etMName.setText(Mname);
+                        etLName.setText(Lname);
+                        etPassword.setText(Password);
 
-                       etFName.setText(Fname);
-                       etMName.setText(Mname);
-                       etLName.setText(Lname);
-                       etPassword.setText(Password);
-
-                   } else{
-                       AlertDialog.Builder builder = new AlertDialog.Builder(EditInfoActivity.this);
-                       builder.setMessage("Get info Failed")
+                    } else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(EditInfoActivity.this);
+                        builder.setMessage("Get info Failed")
                                .setNegativeButton("Retry", null)
                                .create()
                                .show();
-                   }
-               } catch (JSONException e){
-                   e.printStackTrace();
-               }
-           }
-       };
+                    }
+                } catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        };
 
-       GetInfo getInfo = new GetInfo(Email, responseListener);
-       RequestQueue queue2 = Volley.newRequestQueue(EditInfoActivity.this);
-       queue2.add(getInfo);
+        GetInfo getInfo = new GetInfo(Email, responseListener);
+        RequestQueue queue2 = Volley.newRequestQueue(EditInfoActivity.this);
+        queue2.add(getInfo);
     }
+
+
 }
