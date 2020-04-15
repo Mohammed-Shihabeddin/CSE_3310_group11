@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Style Image"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="5dp"
+        android:textSize="24sp" />
+
+    <ImageView
+        android:id="@+id/styleImage"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="70dp"/>
+
+    <TextView
+        android:id="@+id/image_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:singleLine="false"
+        android:text="Hello world"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/bRender"
+        android:layout_width="116dp"
+        android:layout_height="58dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Render" />
+
+</LinearLayout>

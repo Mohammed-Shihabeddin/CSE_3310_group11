@@ -1,6 +1,7 @@
 package com.e.vast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -9,13 +10,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class StylePhotoActivity extends AppCompatActivity {
 
@@ -23,7 +24,9 @@ public class StylePhotoActivity extends AppCompatActivity {
     ImageView image_view;
     Button bUpload;
     Button bCamera;
-    Uri selectedImage;
+    TextView Next;
+    Uri selectedImage = null;
+    Bitmap captureImage = null;
     private static final int PICK_IMAGE = 1;
     private static final int TAKE_IMAGE = 2;
 
@@ -36,30 +39,61 @@ public class StylePhotoActivity extends AppCompatActivity {
         image_view = findViewById(R.id.image_view);
         bUpload = findViewById(R.id.bUpload);
         bCamera = findViewById(R.id.bCamera);
-
-        //Request Camera Permission
-        if(ContextCompat.checkSelfPermission(StylePhotoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(StylePhotoActivity.this,
-                    new String[]{
-                            Manifest.permission.CAMERA
-                    }, 100);
-        }
+        Next = findViewById(R.id.Next);
 
         //When Open Camera button is clicked
         bCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Open camera
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, TAKE_IMAGE);
+                //Request Camera Permission
+                if(ContextCompat.checkSelfPermission(StylePhotoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(StylePhotoActivity.this,
+                            new String[]{
+                                    Manifest.permission.CAMERA
+                            }, TAKE_IMAGE);
+                }
+                if(ContextCompat.checkSelfPermission(StylePhotoActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    //Open camera
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, TAKE_IMAGE);
+                }
             }
         });
 
+        //When Upload Image button is clicked
         bUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(gallery, PICK_IMAGE);
+                //Request Photo gallery Permission
+                if(ContextCompat.checkSelfPermission(StylePhotoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(StylePhotoActivity.this,
+                            new String[]{
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                            }, PICK_IMAGE);
+                }
+
+                if(ContextCompat.checkSelfPermission(StylePhotoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                    //open photo gallery
+                    Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(gallery, PICK_IMAGE);
+                }
+            }
+        });
+
+        //When Next link is clicked
+        Next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Checks that user uploaded an image
+                if(captureImage != null || selectedImage != null){
+                    startActivity(new Intent(StylePhotoActivity.this, SelectStyleActivity.class));
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(StylePhotoActivity.this);
+                    builder.setMessage("Select Content Image first")
+                            .setNegativeButton("Ok", null)
+                            .create()
+                            .show();
+                }
             }
         });
     }
@@ -69,7 +103,7 @@ public class StylePhotoActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == TAKE_IMAGE){
             //Get capture image
-            Bitmap captureImage = (Bitmap) data.getExtras().get("data");
+            captureImage = (Bitmap) data.getExtras().get("data");
             //Set capture image to image_view
             image_view.setImageBitmap(captureImage);
         } else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
