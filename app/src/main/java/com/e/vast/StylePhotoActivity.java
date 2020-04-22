@@ -13,10 +13,16 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class StylePhotoActivity extends AppCompatActivity {
 
@@ -26,9 +32,11 @@ public class StylePhotoActivity extends AppCompatActivity {
     Button bCamera;
     TextView Next;
     Uri selectedImage = null;
+    Bitmap selectedImageBM = null;
     Bitmap captureImage = null;
     private static final int PICK_IMAGE = 1;
     private static final int TAKE_IMAGE = 2;
+    boolean camera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +93,14 @@ public class StylePhotoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Checks that user uploaded an image
-                if(captureImage != null || selectedImage != null){
-                    startActivity(new Intent(StylePhotoActivity.this, SelectStyleActivity.class));
+                if(captureImage != null || selectedImageBM != null){
+                    Intent intent = new Intent(StylePhotoActivity.this, SelectStyleActivity.class);
+                    if (camera) {
+                        intent.putExtra("contentFilePath", createContentImageFile(captureImage));
+                    } else {
+                        intent.putExtra("contentFilePath", createContentImageFile(selectedImageBM));
+                    }
+                    startActivity(intent);
                 }else{
                     AlertDialog.Builder builder = new AlertDialog.Builder(StylePhotoActivity.this);
                     builder.setMessage("Select Content Image first")
@@ -97,6 +111,21 @@ public class StylePhotoActivity extends AppCompatActivity {
             }
         });
     }
+    //This method creates a File for the selected content image and returns the files path
+    private String createContentImageFile (Bitmap contentImage){
+        File fileDir = getApplicationContext().getFilesDir();
+        File contentImageFile = new File (fileDir, "contentImage.jpg");
+        OutputStream os;
+        try {
+            os = new FileOutputStream(contentImageFile);
+            contentImage.compress(Bitmap.CompressFormat.JPEG, 100, os);
+            os.flush();
+            os.close();
+        } catch (Exception e) {
+            Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
+        }
+        return contentImageFile.getAbsolutePath();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -106,9 +135,18 @@ public class StylePhotoActivity extends AppCompatActivity {
             captureImage = (Bitmap) data.getExtras().get("data");
             //Set capture image to image_view
             image_view.setImageBitmap(captureImage);
+            camera = true;
         } else if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null){
             selectedImage = data.getData();
-            image_view.setImageURI(selectedImage);
+
+            //converts Uri image to Bitmap
+            try {
+                selectedImageBM = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            image_view.setImageBitmap(selectedImageBM);
+            camera = false;
         }
 
     }

@@ -2,14 +2,13 @@ package com.e.vast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,6 +25,11 @@ public class EditInfoActivity extends AppCompatActivity {
     EditText etPassword;
     Button bSave;
     String Email;
+    String FName;
+    String MName;
+    String LName;
+    String Password;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,15 @@ public class EditInfoActivity extends AppCompatActivity {
 
         Intent getintent = getIntent();
         Email = getintent.getStringExtra("Email");
+        FName = getintent.getStringExtra("FName");
+        MName = getintent.getStringExtra("MName");
+        LName = getintent.getStringExtra("LName");
+        Password = getintent.getStringExtra("Password");
+
+        etFName.setText(FName);
+        etMName.setText(MName);
+        etLName.setText(LName);
+        etPassword.setText(Password);
 
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,17 +68,18 @@ public class EditInfoActivity extends AppCompatActivity {
                         try {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
-                            if (success){
+                            if (success) {
+                                Toast.makeText(EditInfoActivity.this, "Saved Changes", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(EditInfoActivity.this, HomeScreenActivity.class);
                                 EditInfoActivity.this.startActivity(intent);
-                            }else{
+                            } else {
                                 AlertDialog.Builder builder = new AlertDialog.Builder(EditInfoActivity.this);
                                 builder.setMessage("Changes Failed")
                                         .setNegativeButton("Retry", null)
                                         .create()
                                         .show();
                             }
-                        }catch (JSONException e) {
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
@@ -79,8 +93,10 @@ public class EditInfoActivity extends AppCompatActivity {
 
     }
 
-   public void onResume(){
+    @Override
+    public void onResume() {
         super.onResume();
+
         Log.d("Email", Email);
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
@@ -103,9 +119,9 @@ public class EditInfoActivity extends AppCompatActivity {
                     } else{
                         AlertDialog.Builder builder = new AlertDialog.Builder(EditInfoActivity.this);
                         builder.setMessage("Get info Failed")
-                               .setNegativeButton("Retry", null)
-                               .create()
-                               .show();
+                                .setNegativeButton("Retry", null)
+                                .create()
+                                .show();
                     }
                 } catch (JSONException e){
                     e.printStackTrace();
@@ -116,7 +132,6 @@ public class EditInfoActivity extends AppCompatActivity {
         GetInfo getInfo = new GetInfo(Email, responseListener);
         RequestQueue queue2 = Volley.newRequestQueue(EditInfoActivity.this);
         queue2.add(getInfo);
+
     }
-
-
 }

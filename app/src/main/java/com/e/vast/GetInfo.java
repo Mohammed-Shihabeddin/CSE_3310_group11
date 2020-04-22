@@ -1,7 +1,5 @@
 package com.e.vast;
 
-import android.util.Log;
-
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 
@@ -23,3 +21,4 @@ public class GetInfo extends StringRequest {
         return params;
     }
 }
+

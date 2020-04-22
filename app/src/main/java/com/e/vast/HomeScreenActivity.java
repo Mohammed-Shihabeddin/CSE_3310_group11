@@ -30,9 +30,9 @@ public class HomeScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeScreenActivity.this, EditInfoActivity.class);
-                intent.putExtra("Fname", Fname);
-                intent.putExtra("Mname", Mname);
-                intent.putExtra("Lname", Lname);
+                intent.putExtra("FName", Fname);
+                intent.putExtra("MName", Mname);
+                intent.putExtra("LName", Lname);
                 intent.putExtra("Email", Email);
                 intent.putExtra("Password", Password);
 

@@ -1,9 +1,11 @@
 package com.e.vast;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,9 +17,11 @@ import com.bumptech.glide.Glide;
 
 public class ImageAdapter extends PagerAdapter {
     private Context mContext;
-    private int[] mImageIds = new int[] {R.drawable.style_01, R.drawable.style_02, R.drawable.style_03};
+    private int[] mImageIds = new int[] {R.drawable.style01, R.drawable.style02, R.drawable.style03};
     private LayoutInflater layoutInflater;
     ImageView imageView;
+    Button bRender;
+
 
     ImageAdapter(Context context){
         mContext = context;
@@ -42,6 +46,18 @@ public class ImageAdapter extends PagerAdapter {
         image_position.setText("Image " + (position+1));
         Glide.with(mContext).load(mImageIds[position]).thumbnail(0.1f).into(imageView);
         container.addView(item_view);
+
+        bRender = item_view.findViewById(R.id.bRender);
+
+        bRender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, DisplayFinalImage.class);
+                intent.putExtra("styleImage", item_view.getResources().getResourceEntryName(mImageIds[position])+".jpg");
+                mContext.startActivity(intent);
+            }
+        });
+
         return item_view;
     }
 
