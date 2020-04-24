@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide;
 
 public class ImageAdapter extends PagerAdapter {
     private Context mContext;
-    private int[] mImageIds = new int[] {R.drawable.style01, R.drawable.style02, R.drawable.style03};
+    private int[] mImageIds = new int[] {R.drawable.style01, R.drawable.style02, R.drawable.style_03, R.drawable.style04, R.drawable.style05};
     private LayoutInflater layoutInflater;
     ImageView imageView;
     Button bRender;
