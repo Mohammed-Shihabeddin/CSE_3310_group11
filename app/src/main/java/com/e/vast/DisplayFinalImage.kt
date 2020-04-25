@@ -98,7 +98,7 @@ class DisplayFinalImage : AppCompatActivity() {
     public fun saveImageToStorage(){
         val externalStorageState = Environment.getExternalStorageState()
         if (externalStorageState.equals(Environment.MEDIA_MOUNTED)){
-            val storageDirectory = Environment.getExternalStorageDirectory().toString() + "/Pictures"
+            val storageDirectory = Environment.getExternalStorageDirectory().toString()
             val file = File(storageDirectory, String.format("stylizedImage_%d.jpg", System.currentTimeMillis()))
             try {
                 val stream: OutputStream = FileOutputStream(file)
@@ -135,8 +135,6 @@ class DisplayFinalImage : AppCompatActivity() {
                     baseContext, lastSavedFile, selectedStyle, styleTransferModelExecutor,
                     inferenceThread
             )
-          } else {
-            Toast.makeText(this, "Previous Model still running", Toast.LENGTH_SHORT).show()
-        }
+          }
     }
 }

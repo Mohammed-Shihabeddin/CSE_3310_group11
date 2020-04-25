@@ -43,7 +43,7 @@ public class ImageAdapter extends PagerAdapter {
         View item_view = layoutInflater.inflate(R.layout.swipe_layout, container, false);
         imageView = (ImageView) item_view.findViewById(R.id.styleImage);
         TextView image_position = (TextView) item_view.findViewById(R.id.image_count);
-        image_position.setText("Image " + (position+1));
+        image_position.setText("Style " + (position+1));
         Glide.with(mContext).load(mImageIds[position]).thumbnail(0.1f).into(imageView);
         container.addView(item_view);
 
