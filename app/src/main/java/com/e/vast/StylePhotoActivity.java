@@ -1,5 +1,6 @@
 package com.e.vast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,8 +61,7 @@ public class StylePhotoActivity extends AppCompatActivity {
                             new String[]{
                                     Manifest.permission.CAMERA
                             }, TAKE_IMAGE);
-                }
-                if(ContextCompat.checkSelfPermission(StylePhotoActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                } else{
                     //Open camera
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, TAKE_IMAGE);
@@ -78,9 +79,7 @@ public class StylePhotoActivity extends AppCompatActivity {
                             new String[]{
                                     Manifest.permission.READ_EXTERNAL_STORAGE
                             }, PICK_IMAGE);
-                }
-
-                if(ContextCompat.checkSelfPermission(StylePhotoActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                } else{
                     //open photo gallery
                     Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(gallery, PICK_IMAGE);
@@ -111,6 +110,28 @@ public class StylePhotoActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PICK_IMAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //open photo gallery
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(gallery, PICK_IMAGE);
+            }else{
+                Toast.makeText(this, "Permission not granted. Cannot open photo gallery", Toast.LENGTH_SHORT).show();
+            }
+        } else if (requestCode == TAKE_IMAGE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //Open camera
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(intent, TAKE_IMAGE);
+            }else{
+                Toast.makeText(this, "Permission not granted. Cannot open camera", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     //This method creates a File for the selected content image and returns the files path
     private String createContentImageFile (Bitmap contentImage){
         File fileDir = getApplicationContext().getFilesDir();

@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -73,13 +74,10 @@ class DisplayFinalImage : AppCompatActivity() {
             } else{
                 saveImageToStorage()
             }
-
-            val intent = Intent(this, HomeScreenActivity::class.java)
-            startActivity(intent)
         }
-
     }
 
+    //Handle the result of the app asking for permission
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == 100){
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -91,7 +89,7 @@ class DisplayFinalImage : AppCompatActivity() {
     }
 
     //function to save image to photo gallery
-    public fun saveImageToStorage(){
+    private fun saveImageToStorage(){
         val externalStorageState = Environment.getExternalStorageState()
         if (externalStorageState.equals(Environment.MEDIA_MOUNTED)){
             val storageDirectory = Environment.getExternalStorageDirectory().toString()
@@ -104,12 +102,13 @@ class DisplayFinalImage : AppCompatActivity() {
                 stream.flush()
                 stream.close()
                 Toast.makeText(this, "Image Saved successfully ${Uri.parse(file.absolutePath)}", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, HomeScreenActivity::class.java)
+                startActivity(intent)
             } catch (e: Exception){
                 e.printStackTrace()
             }
         }
     }
-
 
     private fun updateUIWithResults(modelExecutionResult: ModelExecutionResult) {
         setImageView(resultImageView, modelExecutionResult.styledImage)
