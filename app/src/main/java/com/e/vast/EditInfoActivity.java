@@ -19,6 +19,7 @@ import org.json.JSONObject;
 
 public class EditInfoActivity extends AppCompatActivity {
 
+    //initialize variables
     EditText etFName;
     EditText etMName;
     EditText etLName;
@@ -42,6 +43,7 @@ public class EditInfoActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         bSave = (Button) findViewById(R.id.bSave);
 
+        //Gets values passed from HomeScreenActivity
         Intent getintent = getIntent();
         Email = getintent.getStringExtra("Email");
         FName = getintent.getStringExtra("FName");
@@ -49,11 +51,13 @@ public class EditInfoActivity extends AppCompatActivity {
         LName = getintent.getStringExtra("LName");
         Password = getintent.getStringExtra("Password");
 
+        //sets the fields with values
         etFName.setText(FName);
         etMName.setText(MName);
         etLName.setText(LName);
         etPassword.setText(Password);
 
+        //When save button is clicked
         bSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +96,7 @@ public class EditInfoActivity extends AppCompatActivity {
         });
 
     }
-
+    //When this activity resumes display current user's information
     @Override
     public void onResume() {
         super.onResume();

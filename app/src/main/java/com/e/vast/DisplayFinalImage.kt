@@ -67,13 +67,9 @@ class DisplayFinalImage : AppCompatActivity() {
 
         bSave.setOnClickListener{
             // Check for write external storage permission
-            if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                if (ContextCompat.checkSelfPermission(this@DisplayFinalImage, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        !=PackageManager.PERMISSION_GRANTED){
-                    ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
-                } else{
-                    saveImageToStorage()
-                }
+            if (ContextCompat.checkSelfPermission(this@DisplayFinalImage, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    !=PackageManager.PERMISSION_GRANTED){
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), 100)
             } else{
                 saveImageToStorage()
             }

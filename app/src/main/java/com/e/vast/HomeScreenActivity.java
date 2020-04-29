@@ -15,6 +15,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_screen);
 
         Intent intent = getIntent();
+        //Gets passed values from MainActivity
         final String Fname = intent.getStringExtra("Fname");
         final String Mname = intent.getStringExtra("Mname");
         final String Lname = intent.getStringExtra("Lname");
@@ -30,6 +31,7 @@ public class HomeScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeScreenActivity.this, EditInfoActivity.class);
+                //Puts extra values to be passed to EditInfoActivity
                 intent.putExtra("FName", Fname);
                 intent.putExtra("MName", Mname);
                 intent.putExtra("LName", Lname);

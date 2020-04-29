@@ -49,11 +49,12 @@ public class ImageAdapter extends PagerAdapter {
 
         bRender = item_view.findViewById(R.id.bRender);
 
+        //When render button is clicked
         bRender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mContext, DisplayFinalImage.class);
-                intent.putExtra("styleImage", item_view.getResources().getResourceEntryName(mImageIds[position])+".jpg");
+                intent.putExtra("styleImage", item_view.getResources().getResourceEntryName(mImageIds[position])+".jpg"); //passes images file name
                 mContext.startActivity(intent);
             }
         });

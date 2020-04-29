@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -32,6 +33,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         bRegister.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
+
+                //Gets all the text from the EditText fields
                 final String FName = etFName.getText().toString();
                 final String MName = etMName.getText().toString();
                 final String LName = etLName.getText().toString();
@@ -45,11 +48,12 @@ public class RegisterActivity extends AppCompatActivity {
                             JSONObject jsonResponse = new JSONObject(response);
                             boolean success = jsonResponse.getBoolean("success");
                             if (success){
+                                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                                 RegisterActivity.this.startActivity(intent);
                             }else{
                                 AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                builder.setMessage("Register Failed: Email already exists")
+                                builder.setMessage("Register Failed")
                                         .setNegativeButton("Retry", null)
                                         .create()
                                         .show();

@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //When Login button is clicked
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //gets values from edittext fields
                 final String Email = etEmail.getText().toString();
                 final String Password = etPassword.getText().toString();
 
@@ -52,11 +54,13 @@ public class MainActivity extends AppCompatActivity {
                             boolean success = jsonResponse.getBoolean("success");
 
                             if (success){
+                                //Gets returned values from php file
                                 String Fname = jsonResponse.getString("Fname");
                                 String Mname = jsonResponse.getString("Mname");
                                 String Lname = jsonResponse.getString("Lname");
 
                                 Intent intent = new Intent(MainActivity.this, HomeScreenActivity.class);
+                                //Pass these extra values to HomeScreenActivity
                                 intent.putExtra("Fname", Fname);
                                 intent.putExtra("Mname", Mname);
                                 intent.putExtra("Lname", Lname);
